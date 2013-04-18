@@ -834,6 +834,10 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
 config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
 	bool "musl"
 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+	select BR2_TOOLCHAIN_HAS_THREADS
+	select BR2_USE_WCHAR
+	select BR2_LARGEFILE
+	select BR2_INET_IPV6
 	help
 	  Note: musl is a lightweight glibc. It's used by sabotage and BlankOn-arm.
 
