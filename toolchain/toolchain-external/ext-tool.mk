@@ -55,6 +55,10 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
 LIB_EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
 endif
 
+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+LIB_EXTERNAL_LIBS=libgcc_s.so
+endif
+
 ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
 USR_LIB_EXTERNAL_LIBS+=libstdc++.so
 endif
@@ -355,6 +359,8 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
 	fi ; \
 	if test x$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC) == x"y" ; then \
 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
+	elif test x$(BR2_TOOLCHAIN_EXTERNAL_MUSL) == x"y" ; then \
+		$(call check_musl,$${SYSROOT_DIR}) ; \
 	else \
 		$(call check_glibc,$${SYSROOT_DIR}) ; \
 	fi

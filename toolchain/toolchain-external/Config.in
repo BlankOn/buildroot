@@ -806,6 +806,9 @@ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
 config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
 	bool
 
+config BR2_TOOLCHAIN_EXTERNAL_MUSL
+	bool
+
 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
 
 choice
@@ -827,6 +830,13 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
 	  configured to exclude some of its features. Using a toolchain with
 	  eglibc configured to exclude key features may cause build failures to
 	  some packages.
+
+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
+	bool "musl"
+	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+	help
+	  Note: musl is a lightweight glibc. It's used by sabotage and BlankOn-arm.
+
 
 endchoice
 

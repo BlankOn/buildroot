@@ -224,6 +224,13 @@ check_glibc = \
 	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support) ;\
 	$(call check_glibc_rpc_feature,$${SYSROOT_DIR})
 
+check_musl = \
+	SYSROOT_DIR="$(strip $1)"; \
+	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-musl*.so.*' | wc -l` -eq 0; then \
+		echo "Incorrect selection of the C library"; \
+		exit -1; \
+	fi
+
 #
 # Check the conformity of Buildroot configuration with regard to the
 # uClibc configuration of the external toolchain, for a particular
