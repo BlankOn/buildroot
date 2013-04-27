@@ -1,40 +1,44 @@
 #!/bin/sh
 # Check ncurses compatibility
 
+if test -z "${MAKEFILE}"; then
+  MAKEFILE=mktemp
+fi
+
 # What library to link
 ldflags()
 {
-	for ext in so a dll.a dylib ; do
-		for lib in ncursesw ncurses curses ; do
-			$cc -print-file-name=lib${lib}.${ext} | grep -q /
-			if [ $? -eq 0 ]; then
-				echo "-l${lib}"
-				exit
-			fi
-		done
-	done
-	exit 1
+  for ext in so a dll.a dylib ; do
+    for lib in ncursesw ncurses curses ; do
+      $cc -print-file-name=lib${lib}.${ext} | grep -q /
+      if [ $? -eq 0 ]; then
+        echo "-l${lib}"
+        exit
+      fi
+    done
+  done
+  exit 1
 }
 
 # Where is ncurses.h?
 ccflags()
 {
-	if [ -f /usr/include/ncursesw/curses.h ]; then
-		echo '-I/usr/include/ncursesw -DCURSES_LOC="<ncursesw/curses.h>"'
-		echo ' -DNCURSES_WIDECHAR=1'
-	elif [ -f /usr/include/ncurses/ncurses.h ]; then
-		echo '-I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>"'
-	elif [ -f /usr/include/ncurses/curses.h ]; then
-		echo '-I/usr/include/ncurses -DCURSES_LOC="<ncurses/curses.h>"'
-	elif [ -f /usr/include/ncurses.h ]; then
-		echo '-DCURSES_LOC="<ncurses.h>"'
-	else
-		echo '-DCURSES_LOC="<curses.h>"'
-	fi
+  if [ -f /usr/include/ncursesw/curses.h ]; then
+    echo '-I/usr/include/ncursesw -DCURSES_LOC="<ncursesw/curses.h>"'
+    echo ' -DNCURSES_WIDECHAR=1'
+  elif [ -f /usr/include/ncurses/ncurses.h ]; then
+    echo '-I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>"'
+  elif [ -f /usr/include/ncurses/curses.h ]; then
+    echo '-I/usr/include/ncurses -DCURSES_LOC="<ncurses/curses.h>"'
+  elif [ -f /usr/include/ncurses.h ]; then
+    echo '-DCURSES_LOC="<ncurses.h>"'
+  else
+    echo '-DCURSES_LOC="<curses.h>"'
+  fi
 }
 
 # Temp file, try to clean up after us
-tmp=$(mktemp)
+tmp=$(${MKTEMP})
 trap "rm -f $tmp" 0 1 2 3 15
 
 # Check if we can link to ncurses
